@@ -1,6 +1,6 @@
 .sbu-header{
     height: 10%;
-    background-color: #5a7b78;
+    background-color: #147f94;
     color: white;
     line-height: 60px;
     vertical-align: middle;
@@ -62,7 +62,7 @@
     width: 310px;
     margin-top: 0px;
     position: fixed;
-    background: #5a7b78;
+    background: #147f94;
     /*height: 100%;*/
     transition: all 0.2s;
 }
@@ -161,7 +161,7 @@
 }
 
 .label-primary, .badge-primary {
-    background-color: #5a7b78!important;
+    background-color: #147f94!important;
 }
 .badge {
     text-shadow: none;
