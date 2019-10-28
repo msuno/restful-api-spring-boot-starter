@@ -1,0 +1,77 @@
+{
+  "groups": [
+    {
+      "sourceType": "cn.msuno.restful.api.configuration.RestfulApiProperties",
+      "name": "Javadoc restful api",
+      "type": "cn.msuno.restful.api.configuration.RestfulApiProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "restful.api.host",
+      "type": "java.lang.String",
+      "defaultValue": "http://localhost:8080",
+      "description": "Restful Api Host."
+    },
+    {
+      "name": "restful.api.basePath",
+      "type": "java.lang.String",
+      "defaultValue": "/",
+      "description": "Request Url Base Path."
+    },
+    {
+      "name": "restful.api.description",
+      "type": "java.lang.String",
+      "defaultValue": "RESTFUL API",
+      "description": "restful api description."
+    },
+    {
+      "name": "restful.api.version",
+      "type": "java.lang.String",
+      "defaultValue": "3.0",
+      "description": "restful api version."
+    },
+    {
+      "name": "restful.api.title",
+      "type": "java.lang.String",
+      "defaultValue": "RESTFUL API",
+      "description": "restful api title."
+    },
+    {
+      "name": "restful.api.termsOfService",
+      "type": "java.lang.String",
+      "defaultValue": "https://www.msuno.cn",
+      "description": "restful api termsOfService."
+    },
+    {
+      "name": "restful.api.contact.name",
+      "type": "java.lang.String",
+      "defaultValue": "msuno",
+      "description": "restful api contact name."
+    },
+    {
+      "name": "restful.api.contact.url",
+      "type": "java.lang.String",
+      "defaultValue": "https://www.msuno.cn",
+      "description": "restful api contact url."
+    },
+    {
+      "name": "restful.api.contact.email",
+      "type": "java.lang.String",
+      "defaultValue": "msuno@msuno.cn",
+      "description": "restful api contact email."
+    },
+    {
+      "name": "restful.api.license.name",
+      "type": "java.lang.String",
+      "defaultValue": "msuno",
+      "description": "restful api license name."
+    },
+    {
+      "name": "restful.api.license.url",
+      "type": "java.lang.String",
+      "defaultValue": "https://www.msuno.cn",
+      "description": "restful api license url."
+    }
+  ]
+}
