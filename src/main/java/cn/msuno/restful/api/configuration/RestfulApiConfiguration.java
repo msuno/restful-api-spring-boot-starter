@@ -13,6 +13,7 @@ import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_E;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_EMPTY;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_GT;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_ITEMS;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_JSON_PATH;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_LT;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_METHOD;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_METHODS;
@@ -30,9 +31,9 @@ import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_TAG;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_TAGS;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_TITLE;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_TYPE;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_USING;
 import static cn.msuno.restful.api.json.JavadocUtils.JAVADOC_RESOURCE_SUFFIX;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -101,7 +102,7 @@ public class RestfulApiConfiguration {
     }
     
     private void build(Swagger swagger) {
-        SwaggerUtils.listFiles("./json").stream().forEach(v -> {
+        SwaggerUtils.listFiles(ELEMENT_JSON_PATH).stream().forEach(v -> {
             JSONObject json = SwaggerUtils.toJson(SwaggerUtils.readFile(v));
             swagger.setTag(buildTag(json));
             path(swagger, json);
@@ -146,7 +147,7 @@ public class RestfulApiConfiguration {
             for (int k = 0; k < childPath.size(); k ++) {
                 for (int j = 0; j < mds.size(); j++) {
                     JSONObject o = new JSONObject();
-                    jsonObject.put(ELEMENT_OPERATIONID, mds.getString(j).toLowerCase()+"Using"+mds.getString(j).toUpperCase());
+                    jsonObject.put(ELEMENT_OPERATIONID, mds.getString(j).toLowerCase() + ELEMENT_USING + mds.getString(j).toUpperCase());
                     if (jsonObject.containsKey(ELEMENT_CONSUMES)  && ELEMENT_E.equals(jsonObject.getString(ELEMENT_CONSUMES))) {
                         jsonObject.put(ELEMENT_CONSUMES, ELEMENT_EMPTY);
                     }
@@ -164,7 +165,7 @@ public class RestfulApiConfiguration {
     private void buildDefinitions(Swagger swagger, Set<String> bean){
         Set<String> set = new HashSet<>();
         for (String type : bean) {
-            if (ELEMENT_AB_LIST.equals(type) || type.startsWith(ELEMENT_AB_LIST) || !JavadocUtils.baseType(type)) {
+            if (ELEMENT_AB_LIST.equals(type) || type.startsWith(ELEMENT_AB_LIST) || !JavadocUtils.baseType(type) || !JavadocUtils.convertType(type).equals(type)) {
                 continue;
             }
             String key = JavadocUtils.getSimpleName(type);

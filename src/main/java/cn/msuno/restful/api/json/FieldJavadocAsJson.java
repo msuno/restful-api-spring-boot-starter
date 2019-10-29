@@ -1,6 +1,7 @@
 package cn.msuno.restful.api.json;
 
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_AB_LONG;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_AB_SHORT;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DESCRIPTION;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DOUBLE;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_FORMAT;
@@ -9,6 +10,7 @@ import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_INT64;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_INTEGER;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_LONG;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_NUMBER;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_SHORT;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_TYPE;
 import static cn.msuno.restful.api.json.JavadocUtils.convertType;
 import static cn.msuno.restful.api.json.JavadocUtils.isBlank;
@@ -45,7 +47,11 @@ class FieldJavadocAsJson implements JavadocAsJson {
                 json.put(ELEMENT_FORMAT, ELEMENT_INT32);
             }
         } else if (ELEMENT_NUMBER.equals(convertType)) {
-            json.put(ELEMENT_FORMAT, ELEMENT_DOUBLE);
+            if (toString.equals(ELEMENT_SHORT) || toString.equals(ELEMENT_AB_SHORT)) {
+                json.put(ELEMENT_FORMAT, ELEMENT_INT32);
+            } else {
+                json.put(ELEMENT_FORMAT, ELEMENT_DOUBLE);
+            }
         }
         jsonDoc.put(field.getSimpleName().toString(), json);
         return jsonDoc;

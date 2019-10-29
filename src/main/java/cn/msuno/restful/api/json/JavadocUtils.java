@@ -1,7 +1,6 @@
 package cn.msuno.restful.api.json;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -53,6 +52,8 @@ public class JavadocUtils {
     public static final String ELEMENT_LT = "<";
     public static final String ELEMENT_GT = ">";
     public static final String ELEMENT_REF = "$ref";
+    public static final String ELEMENT_JSON_PATH = "./json";
+    public static final String ELEMENT_USING = "Using";
     public static final String ELEMENT_DEFINITIONS = "#/definitions/";
     public static final String ELEMENT_ITEMS = "items";
     public static final String ELEMENT_SCHEMA = "schema";
@@ -76,6 +77,16 @@ public class JavadocUtils {
     public static final String ELEMENT_STRING = "string";
     public static final String ELEMENT_ARRAY = "array";
     public static final String ELEMENT_OBJECT = "object";
+    public static final String ELEMENT_BOOLEAN = "boolean";
+    public static final String ELEMENT_AB_BOOLEAN = "java.lang.Boolean";
+    public static final String ELEMENT_CHAR = "char";
+    public static final String ELEMENT_AB_CHAR = "java.lang.Character";
+    public static final String ELEMENT_FLOAT = "float";
+    public static final String ELEMENT_AB_FLOAT = "java.lang.Float";
+    public static final String ELEMENT_SHORT = "short";
+    public static final String ELEMENT_AB_SHORT = "java.lang.Short";
+    public static final String ELEMENT_BYTE = "byte";
+    public static final String ELEMENT_AB_BYTE = "java.lang.Byte";
     
     
     private JavadocUtils() {
@@ -84,6 +95,35 @@ public class JavadocUtils {
     
     public static boolean isBlank(String s) {
         return s == null || s.trim().isEmpty();
+    }
+    
+    /**
+     * java类型转前端类型
+     * @param type  java.lang.Integer => integer
+     * @return  integer
+     */
+    public static String convertType(String type) {
+        Map<String, String> map = ImmutableMap.<String, String> builder()
+                .put(ELEMENT_AB_INTEGER, ELEMENT_INTEGER)
+                .put(ELEMENT_AB_STRING, ELEMENT_STRING)
+                .put(ELEMENT_INT, ELEMENT_INTEGER)
+                .put(ELEMENT_AB_LIST, ELEMENT_ARRAY)
+                .put(ELEMENT_LONG, ELEMENT_INTEGER)
+                .put(ELEMENT_AB_LONG, ELEMENT_INTEGER)
+                .put(ELEMENT_DOUBLE, ELEMENT_NUMBER)
+                .put(ELEMENT_AB_DOUBLE, ELEMENT_NUMBER)
+                .put(ELEMENT_CHAR, ELEMENT_STRING)
+                .put(ELEMENT_AB_CHAR, ELEMENT_STRING)
+                .put(ELEMENT_FLOAT, ELEMENT_NUMBER)
+                .put(ELEMENT_AB_FLOAT, ELEMENT_NUMBER)
+                .put(ELEMENT_SHORT, ELEMENT_NUMBER)
+                .put(ELEMENT_AB_SHORT, ELEMENT_NUMBER)
+                .put(ELEMENT_BYTE, ELEMENT_INT32)
+                .put(ELEMENT_AB_BYTE, ELEMENT_INT32)
+                //.put(ELEMENT_BOOLEAN, ELEMENT_BOOLEAN)
+                .put(ELEMENT_AB_BOOLEAN, ELEMENT_BOOLEAN)
+                .build();
+        return map.getOrDefault(type, type);
     }
     
     /**
@@ -119,7 +159,7 @@ public class JavadocUtils {
     }
     
     public static boolean baseType(String str){
-        for (String s : Arrays.asList(ELEMENT_INTEGER, ELEMENT_NUMBER, ELEMENT_ARRAY, ELEMENT_STRING)) {
+        for (String s : Arrays.asList(ELEMENT_INTEGER, ELEMENT_NUMBER, ELEMENT_ARRAY, ELEMENT_STRING, ELEMENT_INT, ELEMENT_INT32, ELEMENT_INT64, ELEMENT_BOOLEAN)) {
             if (s.equals(str)) {
                 return false;
             }
@@ -163,25 +203,6 @@ public class JavadocUtils {
      */
     public static boolean isJavaClass(Class<?> clz) {
         return clz != null && clz.getClassLoader() == null;
-    }
-    
-    /**
-     * java类型转前端类型
-     * @param type  java.lang.Integer => integer
-     * @return  integer
-     */
-    public static String convertType(String type) {
-        Map<String, String> map = ImmutableMap.<String, String> builder()
-                .put(ELEMENT_AB_INTEGER, ELEMENT_INTEGER)
-                .put(ELEMENT_AB_STRING, ELEMENT_STRING)
-                .put(ELEMENT_INT, ELEMENT_INTEGER)
-                .put(ELEMENT_AB_LIST, ELEMENT_ARRAY)
-                .put(ELEMENT_LONG, ELEMENT_INTEGER)
-                .put(ELEMENT_AB_LONG, ELEMENT_INTEGER)
-                .put(ELEMENT_DOUBLE, ELEMENT_NUMBER)
-                .put(ELEMENT_AB_DOUBLE, ELEMENT_NUMBER)
-                .build();
-        return map.getOrDefault(type, type);
     }
     
     /**

@@ -6,6 +6,7 @@ import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_API;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_BODY;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_CONSUMES;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DEFAULT;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DEFINITIONS;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DEPRECATED;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DESCRIPTION;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_EMPTY;
@@ -93,8 +94,11 @@ public class MethodJavadocAsJson implements JavadocAsJson {
         JSONObject code200 = new JSONObject();
         code200.put(ELEMENT_DESCRIPTION, "OK");
         JSONObject scheme = new JSONObject();
-        String definition = "#/definitions/";
-        scheme.put("$ref", definition + JavadocUtils.getSimpleName(responseType));
+        if (!responseType.equals(JavadocUtils.convertType(responseType))) {
+            scheme.put("type", JavadocUtils.convertType(responseType));
+        } else {
+            scheme.put("$ref", ELEMENT_DEFINITIONS + JavadocUtils.getSimpleName(responseType));
+        }
         code200.put("schema", scheme);
         res.put("200", code200);
         return res;
