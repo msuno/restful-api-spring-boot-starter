@@ -5,6 +5,7 @@ import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_AB_SHORT;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DESCRIPTION;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DOUBLE;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_FORMAT;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_IGNORE;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_INT32;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_INT64;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_INTEGER;
@@ -33,6 +34,10 @@ class FieldJavadocAsJson implements JavadocAsJson {
         String javadoc = processingEnv.getElementUtils().getDocComment(field);
         if (isBlank(javadoc)) {
             javadoc = field.getSimpleName().toString();
+        }
+        JSONObject javaDoc = JavadocUtils.javaDoc(javadoc);
+        if (javaDoc.containsKey(ELEMENT_IGNORE)) {
+            return null;
         }
         JSONObject jsonDoc = new JSONObject();
         JSONObject json = new JSONObject();

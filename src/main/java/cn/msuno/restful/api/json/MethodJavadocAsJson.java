@@ -10,6 +10,7 @@ import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DEFINITIONS;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DEPRECATED;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DESCRIPTION;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_EMPTY;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_IGNORE;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_IN;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_METHOD;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_NAME;
@@ -66,6 +67,9 @@ public class MethodJavadocAsJson implements JavadocAsJson {
             jsonDoc.putAll(getMappingParam(method));
         }
         JSONObject javaDoc = JavadocUtils.javaDoc(methodJavadoc);
+        if (javaDoc.containsKey(ELEMENT_IGNORE)) {
+            return null;
+        }
         jsonDoc.put(ELEMENT_PARAM_TYPE, getParamErasures((ExecutableElement) method, api, javaDoc.getJSONObject(ELEMENT_PARAM)));
         TypeMirror returnType = ((ExecutableElement) method).getReturnType();
         String responseString = returnType.toString();
