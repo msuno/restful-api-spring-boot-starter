@@ -6,6 +6,7 @@ import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DEPRECATED;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DESCRIPTION;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DOC;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_ENUM_CONSTANTS;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_IGNORE;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_METHODS;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_NAME;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_PATH;
@@ -46,7 +47,10 @@ class JavadocBuilder {
         if (isBlank(classDoc)) {
             classDoc = className;
         }
-        
+        JSONObject javaDoc = JavadocUtils.javaDoc(classDoc);
+        if (javaDoc.containsKey(ELEMENT_IGNORE)) {
+            return null;
+        }
         Map<ElementKind, List<Element>> children = new EnumMap<>(ElementKind.class);
         for (Element enclosedElement : classElement.getEnclosedElements()) {
             if (!children.containsKey(enclosedElement.getKind())) {
