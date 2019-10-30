@@ -5,8 +5,9 @@
   <groupId>cn.msuno</groupId>
   <artifactId>restful-api-spring-boot-starter</artifactId>
   <version>1.0.0</version>
-  <name>restful-api</name>
+  <name>restful-api-spring-boot-starter</name>
   <description>Demo project for Spring Boot</description>
+  <url>https://www.msuno.cn</url>
 
   <licenses>
     <license>
@@ -19,6 +20,8 @@
   <scm>
     <tag>master</tag>
     <url>git@github.com:msuno/restful-api-spring-boot-starter.git</url>
+    <connection>https://github.com/msuno/restful-api-spring-boot-starter.git</connection>
+    <developerConnection>https://github.com/msuno</developerConnection>
   </scm>
 
   <developers>
