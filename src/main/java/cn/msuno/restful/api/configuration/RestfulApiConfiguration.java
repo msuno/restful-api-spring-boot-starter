@@ -26,6 +26,7 @@ import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_PRODUCES;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_PROPERTIES;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_REF;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_SCHEMA;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_SWAGGER;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_T;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_TAG;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_TAGS;
@@ -59,6 +60,8 @@ import cn.msuno.restful.api.json.JavadocUtils;
 @ConditionalOnWebApplication
 @EnableConfigurationProperties(RestfulApiProperties.class)
 public class RestfulApiConfiguration {
+    
+    private static final Map<String, Swagger> cache = new HashMap<>();
     
     private static final Pattern blockSeparator = Pattern.compile("\\s", Pattern.MULTILINE);
     
@@ -94,10 +97,13 @@ public class RestfulApiConfiguration {
     @Bean
     @ConditionalOnMissingBean(Swagger.class)
     public Swagger apiSwagger(){
-        Swagger swagger = new Swagger().setInfo(apiInfo())
-                .setBasePath(restfulApiProperties.getBasePath()).setHost(restfulApiProperties.getHost());
+        if (cache.containsKey(ELEMENT_SWAGGER)) {
+            return cache.get(ELEMENT_SWAGGER);
+        }
+        Swagger swagger = new Swagger().setInfo(apiInfo()).setBasePath(restfulApiProperties.getBasePath()).setHost(restfulApiProperties.getHost());
         build(swagger);
         swagger.setStatusCode(responseCode);
+        cache.put(ELEMENT_SWAGGER, swagger);
         return swagger;
     }
     

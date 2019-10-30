@@ -42,6 +42,7 @@ public class JavadocUtils {
     public static final String ELEMENT_TAGS = "tags";
     public static final String ELEMENT_TAG = "tag";
     public static final String ELEMENT_IGNORE = "ignore";
+    public static final String ELEMENT_SWAGGER = "swagger";
     
     /** base string */
     public static final String ELEMENT_DOT = ".";
