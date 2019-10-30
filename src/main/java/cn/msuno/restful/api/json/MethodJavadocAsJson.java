@@ -1,28 +1,40 @@
 package cn.msuno.restful.api.json;
 
 import static cn.msuno.restful.api.json.JavadocBuilder.hasDeprecated;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_200;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_201;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_401;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_403;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_404;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_ABSOLUTE_TYPE;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_API;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_BODY;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_CONSUMES;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_CREATED;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DEFAULT;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DEFINITIONS;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DEPRECATED;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_DESCRIPTION;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_EMPTY;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_FORBIDDEN;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_IGNORE;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_IN;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_METHOD;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_NAME;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_NOT_FOUND;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_OK;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_PARAM;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_PARAM_TYPE;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_PATH;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_PRODUCES;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_QUERY;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_REF;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_REQUIRED;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_RESPONSES;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_SCHEMA;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_SUMMARY;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_TYPE;
+import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_UNAUTHORIZED;
 import static cn.msuno.restful.api.json.JavadocUtils.convertType;
 import static cn.msuno.restful.api.json.JavadocUtils.isBlank;
 
@@ -75,7 +87,7 @@ public class MethodJavadocAsJson implements JavadocAsJson {
         String responseString = returnType.toString();
         jsonDoc.put(ELEMENT_ABSOLUTE_TYPE, responseString);
         jsonDoc.put(ELEMENT_DEPRECATED, hasDeprecated(method));
-        jsonDoc.put(ELEMENT_DESCRIPTION, javaDoc.getString(ELEMENT_DESCRIPTION));
+        jsonDoc.put(ELEMENT_DESCRIPTION, javaDoc.getOrDefault(ELEMENT_DESCRIPTION, ELEMENT_EMPTY).toString().trim());
         jsonDoc.put(ELEMENT_SUMMARY, javaDoc.getOrDefault(ELEMENT_SUMMARY, methodName));
         jsonDoc.put(ELEMENT_RESPONSES, buildResponse(responseString));
         return jsonDoc;
@@ -84,27 +96,27 @@ public class MethodJavadocAsJson implements JavadocAsJson {
     private JSONObject buildResponse(String responseType){
         JSONObject res = new JSONObject();
         JSONObject code201 = new JSONObject();
-        code201.put(ELEMENT_DESCRIPTION, "Created");
-        res.put("201", code201);
+        code201.put(ELEMENT_DESCRIPTION, ELEMENT_CREATED);
+        res.put(ELEMENT_201, code201);
         JSONObject code401 = new JSONObject();
-        code401.put(ELEMENT_DESCRIPTION, "Unauthorized");
-        res.put("401", code401);
+        code401.put(ELEMENT_DESCRIPTION, ELEMENT_UNAUTHORIZED);
+        res.put(ELEMENT_401, code401);
         JSONObject code403 = new JSONObject();
-        code403.put(ELEMENT_DESCRIPTION, "Forbidden");
-        res.put("403", code403);
+        code403.put(ELEMENT_DESCRIPTION, ELEMENT_FORBIDDEN);
+        res.put(ELEMENT_403, code403);
         JSONObject code404 = new JSONObject();
-        code404.put(ELEMENT_DESCRIPTION, "Not Found");
-        res.put("404", code404);
+        code404.put(ELEMENT_DESCRIPTION, ELEMENT_NOT_FOUND);
+        res.put(ELEMENT_404, code404);
         JSONObject code200 = new JSONObject();
-        code200.put(ELEMENT_DESCRIPTION, "OK");
+        code200.put(ELEMENT_DESCRIPTION, ELEMENT_OK);
         JSONObject scheme = new JSONObject();
         if (!responseType.equals(JavadocUtils.convertType(responseType))) {
-            scheme.put("type", JavadocUtils.convertType(responseType));
+            scheme.put(ELEMENT_TYPE, JavadocUtils.convertType(responseType));
         } else {
-            scheme.put("$ref", ELEMENT_DEFINITIONS + JavadocUtils.getSimpleName(responseType));
+            scheme.put(ELEMENT_REF, ELEMENT_DEFINITIONS + JavadocUtils.getSimpleName(responseType));
         }
-        code200.put("schema", scheme);
-        res.put("200", code200);
+        code200.put(ELEMENT_SCHEMA, scheme);
+        res.put(ELEMENT_200, code200);
         return res;
     }
     

@@ -59,6 +59,16 @@ public class JavadocUtils {
     public static final String ELEMENT_ITEMS = "items";
     public static final String ELEMENT_SCHEMA = "schema";
     public static final String ELEMENT_OPERATIONID = "operationId";
+    public static final String ELEMENT_200 = "200";
+    public static final String ELEMENT_201 = "201";
+    public static final String ELEMENT_401 = "401";
+    public static final String ELEMENT_403 = "403";
+    public static final String ELEMENT_404 = "404";
+    public static final String ELEMENT_OK = "OK";
+    public static final String ELEMENT_NOT_FOUND = "Not Found";
+    public static final String ELEMENT_FORBIDDEN = "Forbidden";
+    public static final String ELEMENT_UNAUTHORIZED = "Unauthorized";
+    public static final String ELEMENT_CREATED = "Created";
     
     /** base type */
     public static final String ELEMENT_AB_LONG = "java.lang.Long";
