@@ -111,7 +111,7 @@ public class JavadocUtils {
     
     /**
      * java类型转前端类型
-     * @param type  java.lang.Integer => integer
+     * @param type  java.lang.Integer : integer
      * @return  integer
      */
     public static String convertType(String type) {
@@ -180,8 +180,8 @@ public class JavadocUtils {
     }
     
     /**
-     * 获取简易名称， 替换'>' '<' 为 '«' '»'
-     * @param name  cn.msuno.starter.Response<java.util.List<cn.msuno.starter.User>> => Response«List«User»»
+     * 获取简易名称
+     * @param name  cn.msuno.starter.Response&lt;java.util.List&lt;cn.msuno.starter.User&gt;&gt; : Response«List«User»»
      * @return  Response«List«User»»
      */
     public static String getSimpleName(String name) {
@@ -198,8 +198,8 @@ public class JavadocUtils {
     
     /**
      * 获取下一层结构
-     * @param type  cn.msuno.starter.Response<java.util.List<cn.msuno.starter.User>> => java.util.List<cn.msuno.starter.User>
-     * @return  java.util.List<cn.msuno.starter.User>
+     * @param type  cn.msuno.starter.Response&lt;java.util.List&lt;cn.msuno.starter.User&gt;&gt; : java.util.List&lt;cn.msuno.starter.User&gt;
+     * @return  java.util.List&lt;cn.msuno.starter.User&gt;
      */
     public static String setRef(String type){
         if (!type.contains(ELEMENT_LT)) {
@@ -211,7 +211,7 @@ public class JavadocUtils {
     /**
      * 是否是自定义类
      * @param clz   Class.class
-     * @return
+     * @return true / false
      */
     public static boolean isJavaClass(Class<?> clz) {
         return clz != null && clz.getClassLoader() == null;
@@ -219,7 +219,7 @@ public class JavadocUtils {
     
     /**
      * 判断开头是否是数组
-     * @param str   java.util.List<cn.msuno.starter.User>
+     * @param str   java.util.List&lt;cn.msuno.starter.User&gt;
      * @return  true / false
      */
     public static boolean isArray(String str) {
