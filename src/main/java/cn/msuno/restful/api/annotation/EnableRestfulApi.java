@@ -14,5 +14,15 @@ import cn.msuno.restful.api.configuration.RestfulController;
 @Documented
 @Import({RestfulApiConfiguration.class, RestfulController.class})
 public @interface EnableRestfulApi {
+    /**
+     * 扫描包路径
+     * @return []
+     */
     String[] value() default {};
+    
+    /**
+     * 生成一个json文件
+     * @return true
+     */
+    boolean single() default false;
 }

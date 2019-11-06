@@ -8,12 +8,14 @@ import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_JSON_RES;
 import static cn.msuno.restful.api.json.JavadocUtils.ELEMENT_START;
 import static cn.msuno.restful.api.json.JavadocUtils.JAVADOC_RESOURCE_SUFFIX;
 import static cn.msuno.restful.api.json.JavadocUtils.PACKAGES_OPTION;
+import static cn.msuno.restful.api.json.JavadocUtils.isBlank;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -36,6 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.msuno.restful.api.annotation.EnableRestfulApi;
+import cn.msuno.restful.api.bean.Swagger;
 
 public class JavadocProcessor extends AbstractProcessor {
     
@@ -43,6 +46,11 @@ public class JavadocProcessor extends AbstractProcessor {
     private static final Set<TypeElement> other = new HashSet<>();
     private static final Set<Element> alreadyProcessed = new HashSet<>();
     private static Set<String> buildPath;
+    private static boolean type = false;
+    private static Set<JSONObject> controllerSet = new HashSet<>();
+    private static Map<String, JSONObject> beanMap = new HashMap<>();
+    private static boolean hasBuild = false;
+    
     
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnvironment) {
@@ -82,6 +90,19 @@ public class JavadocProcessor extends AbstractProcessor {
         // 构建非controller json
         build(other, jsonJavadocBuilder, ELEMENT_JSON_RES, null);
         
+        if (!hasBuild && type) {
+            hasBuild = true;
+            Swagger swagger = JavadocUtils.build(controllerSet, beanMap);
+            try {
+                FileObject resource = processingEnv.getFiler()
+                        .createResource(StandardLocation.CLASS_OUTPUT, "", "swagger.json");
+                try(OutputStream o = resource.openOutputStream()){
+                    o.write(JSONObject.toJSONString(swagger).getBytes(UTF_8));
+                }
+            } catch (IOException ex) {
+                processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "Javadoc retention failed; " + ex);
+            }
+        }
         return false;
     }
     
@@ -97,7 +118,11 @@ public class JavadocProcessor extends AbstractProcessor {
             }
             // 编译class的javadoc
             JSONObject javadoc = javadocBuilder.getClassJavadocAsJsonOrNull(e, api);
-            if (null != javadoc && javadoc.size() > 0) {
+            if (null != javadoc && javadoc.size() > 0 && type && isBlank(api)) {
+                beanMap.put(e.getQualifiedName().toString(), javadoc);
+            } else if (null != javadoc && javadoc.size() > 0 && type && ELEMENT_API.equals(api)){
+                controllerSet.add(javadoc);
+            } else if (null != javadoc && javadoc.size() > 0) {
                 try {
                     outputJsonDoc(e, javadoc, path);
                 } catch (IOException ex) {
@@ -136,6 +161,7 @@ public class JavadocProcessor extends AbstractProcessor {
                 buildPath = new HashSet<>();
             }
             buildPath.addAll(Arrays.asList(restfulApi.value()));
+            type = restfulApi.single();
         }
         if (kind == ElementKind.CLASS || kind == ElementKind.INTERFACE || kind == ElementKind.ENUM) {
             generateJavadocForClass(element);

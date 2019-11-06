@@ -1,5 +1,7 @@
 package cn.msuno.restful.api.configuration;
 
+import static cn.msuno.restful.api.json.JavadocUtils.JAVADOC_RESOURCE_SUFFIX;
+import static cn.msuno.restful.api.json.JavadocUtils.UTF_8;
 import static cn.msuno.restful.api.json.JavadocUtils.isBlank;
 
 import java.io.File;
@@ -29,9 +31,9 @@ public class SwaggerUtils {
             Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources(dirPath);
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
-                String path = URLDecoder.decode(url.getFile(), "UTF-8");
+                String path = URLDecoder.decode(url.getFile(), UTF_8);
                 File file = new File(path);
-                File[] files = file.listFiles((dir, name) -> name.endsWith("_javadoc.json"));
+                File[] files = file.listFiles((dir, name) -> name.endsWith(JAVADOC_RESOURCE_SUFFIX));
                 result.addAll(Arrays.asList(files));
             }
         } catch (IOException e) {
@@ -42,10 +44,10 @@ public class SwaggerUtils {
     
     public static File getFile(String name) {
         try {
-            Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources("./json/res/"+name);
+            Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources("./" + name);
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
-                String path = URLDecoder.decode(url.getFile(), "UTF-8");
+                String path = URLDecoder.decode(url.getFile(), UTF_8);
                 File file = new File(path);
                 return file;
             }
@@ -73,5 +75,9 @@ public class SwaggerUtils {
             obj.putAll(JSONObject.parseObject(res, Feature.DisableCircularReferenceDetect));
         }
         return obj;
+    }
+    
+    public static JSONObject toJson(File file) {
+        return toJson(readFile(file));
     }
 }

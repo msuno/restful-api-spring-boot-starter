@@ -3,7 +3,6 @@ package cn.msuno.restful.api.configuration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import cn.msuno.restful.api.bean.Contact;
-import cn.msuno.restful.api.bean.Info;
 import cn.msuno.restful.api.bean.License;
 
 @ConfigurationProperties(prefix = "restful.api")
