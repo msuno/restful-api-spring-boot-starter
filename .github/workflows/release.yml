@@ -20,7 +20,7 @@ jobs:
 
       - name: Build with Maven
         run: |
-          mvn clean install -DskipTests
+          mvn clean package -DskipTests
           tar -zcvf restful-api-spring-boot-starter.tar.gz target/restful-api-spring-boot-starter-1.1.0.jar
           tar -zcvf restful-api-spring-boot-starter-javadoc.tar.gz target/restful-api-spring-boot-starter-1.1.0-javadoc.jar
           tar -zcvf restful-api-spring-boot-starter-sources.tar.gz target/restful-api-spring-boot-starter-1.1.0-sources.jar
