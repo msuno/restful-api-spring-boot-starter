@@ -55,28 +55,10 @@ public class JavadocProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnvironment) {
         JavadocBuilder jsonJavadocBuilder = new JavadocBuilder(processingEnv);
-        final Map<String, String> options = processingEnv.getOptions();
-        final String packagesOption = options.get(PACKAGES_OPTION);
-        // 保留与该谓词匹配的类的Javadoc
-        final PackageFilter packageFilter = packagesOption == null ? new PackageFilter() : new PackageFilter(packagesOption);
-        
-        // 如果为所有软件包保留Javadoc，则@RetainJavadoc注释是多余的。
-        // 否则，请确保不管程序包如何，带注释的类都保留了其Javadoc。
-        if (!packageFilter.allowAllPackages()) {
-            for (TypeElement annotation : annotations) {
-                if (isRetainJavadocAnnotation(annotation)) {
-                    for (Element e : roundEnvironment.getElementsAnnotatedWith(annotation)) {
-                        generateJavadoc(e);
-                    }
-                }
-            }
-        }
         
         // 扫描所有class
         for (Element e : roundEnvironment.getRootElements()) {
-            if (packageFilter.test(e)) {
-                generateJavadoc(e);
-            }
+            generateJavadoc(e);
         }
         
         //没有restful注解不编译javadoc
@@ -240,16 +222,6 @@ public class JavadocProcessor extends AbstractProcessor {
             typeName = typeName.replace(ELEMENT_DOT, ELEMENT_DOLL);
         }
         return typeName;
-    }
-    
-    /**
-     * 是否有RetainJavadoc注解
-     * @param annotation    class元素
-     * @return    true / false
-     */
-    private static boolean isRetainJavadocAnnotation(TypeElement annotation) {
-        return annotation.getQualifiedName().toString().equals(RetainJavadoc.class.getName())
-                || annotation.getAnnotation(RetainJavadoc.class) != null;
     }
     
     @Override
